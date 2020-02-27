@@ -73,13 +73,14 @@ int main()
     
     
     my_path = getenv("MYPATH");
-    printf("%s",my_path);
+    //printf("%s",my_path);
     int path_free = count_commands(my_path,':');
     char ** paths = split_line(my_path,":");
     
     
     size = pathconf(".", _PC_PATH_MAX);
     while(1){
+
         if ((buf = (char *)malloc((size_t)size)) != NULL)
             ptr = getcwd(buf, (size_t)size);
         printf("%s$ ",ptr);
@@ -93,38 +94,49 @@ int main()
         }
         // 2D array of all commands 
         commands = split_line(input, " ");
-
-        //~~~~~~~~~~~~~~~~
+        int PIPELINE = 0;
+        int BACKGROUND = 0;
+        // Check if it is a Pipeline or background or both process
         for(int i = 0; i < words; i++){
-            
             if(strcmp(commands[i],"|")==0){
-                printf("PIPELINE");
+                PIPELINE = 1;
             }
         }
+        if(strcmp(commands[words-1],"&\n")==0){
+            BACKGROUND = 1;
+        }
+        //~~~~~~~~~~~~~~~~
+        if(PIPELINE && BACKGROUND){
+            printf("ITS A BACKGROUND PIPELINE\n");
+            
+            
+            
+            
+        }else if(PIPELINE){
+            printf("ITS A PIPELINE\n");
+            
+            
+            
+            
+        }else if(BACKGROUND){
+            printf("ITS A BACKGROUND\n");
+            
+            
+            
+            
+        }else{
+            printf("ITS A NORMAL COMMAND\n");
+            
+            
+            
+            
+            
+        }
+
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         //~~~~~~~~~~~~~~~~
         // Freeing inputs
