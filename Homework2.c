@@ -13,7 +13,6 @@ char * get_line(){
     while (fgets(buffer, sizeof(buffer), stdin) != 0 )
     {
         size_t size = sizeof(buffer) / sizeof(buffer[0]);
-        ///printf("%c",buffer[size-10]);
         size_t buf_len = strlen(buffer);
         char *extra = realloc(input, buf_len + cur_len + 1);
         if (extra == 0){
@@ -29,57 +28,46 @@ char * get_line(){
     }
     return input;
 }
+char ** split_line(char* line){
+    char ** input = (char**)calloc(100,sizeof(char*));
+    char * token = strtok(line, " ");
+    int count = 0;
+    while( token != NULL){
+        printf("%s\n",token);
+        input[count] = (char *)malloc(1024*sizeof(char));
+        strcpy(input[count],token);
+        token = strtok(NULL, " ");
+        count = count + 1;
+    }
+    return input;
+}
 int main()
 {
-   /*
-    printf("%s",get_line());
-    char * ptr;
-    char * buf;
-    long size;
-    size = pathconf(".", _PC_PATH_MAX);
-    
-    char input[10];
-    */
-    
-    char * hi;
+    char * input;
+    char ** commands;
     while(1){
-        hi = get_line();
-        printf("%s",hi);
-        if(strcmp(hi,"quit\n")==0){
-            free(hi);
+        input = get_line();
+        
+        if(strcmp(input,"quit\n")==0){
+            free(input);
             break;
         }
-        free(hi);
-       
+        commands = split_line(input);
+        int i = 0;
+        int trip = 1;
+        while(i<99){
+            if(commands[i] == NULL){
+                printf("ENDING\n");
+                break;
+            }
+            free(commands[i]);
+            printf("%s\n",commands[i]);
+            i = i +1;
+        }
+        free(commands);
+        free(input);
     }
 
-    /*
-    char * ptr;
-    char * buf;
-    long size;
-    size = pathconf(".", _PC_PATH_MAX);
-    
-    char input[10];
-    int over = 1;
-    while(over){
-        if ((buf = (char *)malloc((size_t)size)) != NULL){
-            ptr = getcwd(buf, (size_t)size);
-        }
-        printf("%s$ ",ptr);
-        if(fgets(input,10,stdin)){
-            if(strcmp(input,"quit\n")==0){
-                printf("yes");
-                over = 0;
-                free(buf);
-                break;
-            }else{
-                
-            }
-        } else {
-            printf("Something went wrong!!!\n");
-        }
-        free(buf);
-    }
-    */
+
     return EXIT_SUCCESS;
 }
