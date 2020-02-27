@@ -47,7 +47,6 @@ char ** split_line(char* line, char* delim){
     char * token = strtok(line, delim);
     int count = 0;
     while( token != NULL){
-        printf("%s\n",token);
         input[count] = calloc(1024,sizeof(char));
         strcpy(input[count],token);
         token = strtok(NULL, delim);
