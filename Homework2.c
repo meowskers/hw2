@@ -5,16 +5,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
-
-int main()
-{
-   
-
-    //~~~~~~~~~~~~~
-    
-    
-    
-    
+char * get_line(){
     char buffer[10];
     char *input = 0;
     size_t cur_len = 0;
@@ -25,8 +16,9 @@ int main()
         ///printf("%c",buffer[size-10]);
         size_t buf_len = strlen(buffer);
         char *extra = realloc(input, buf_len + cur_len + 1);
-        if (extra == 0)
+        if (extra == 0){
             break;
+        }
         input = extra;
         strcpy(input + cur_len, buffer);
         cur_len += buf_len;
@@ -34,13 +26,16 @@ int main()
         if(yo!=NULL){
             break;
         }
-        printf("%s [%d]", input, (int)strlen(input));
     }
-    printf("%s [%d]", input, (int)strlen(input));
-    free(input);
-    //return 0;    
-    
-    
+    return input;
+}
+int main()
+{
+   
+
+    char* yo = get_line();
+    printf("%s", yo);
+    free(yo);
     
     
     //~~~~~~~~~~~
