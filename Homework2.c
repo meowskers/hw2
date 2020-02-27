@@ -8,14 +8,14 @@
 
 int main()
 {
-   
+   /*
     char * hi = getenv("MYPATH");
     printf("%s\n",hi);
     int size = pathconf(".", _PC_PATH_MAX);
     char * buf;
     char * ptr;
     //~~~~~~~~~~~~~
-    
+    */
     
     /*
     char *text = calloc(1,1), buffer[10];
