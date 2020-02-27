@@ -66,28 +66,26 @@ int main()
 {
     char * input;
     char ** commands;
+    long size;
+    char * buf;
+    char * ptr;
+    
+    size = pathconf(".", _PC_PATH_MAX);
     while(1){
+        if ((buf = (char *)malloc((size_t)size)) != NULL)
+            ptr = getcwd(buf, (size_t)size);
+        printf("%s$ ",ptr);
         input = get_line();
         int words = count_commands(input);
         if(strcmp(input,"quit\n")==0){
+            printf("bye\n")
             free(input);
             break;
         }
+        
         commands = split_line(input);
         free_2d(commands,words);
         free(input);
-        /*
-        while(i<99){
-            if(commands[i] == NULL){
-                printf("ENDING\n");
-                break;
-            }
-            free(commands[i]);
-            printf("%s\n",commands[i]);
-            i = i +1;
-        }
-        free(commands);
-        */
 
     }
 
