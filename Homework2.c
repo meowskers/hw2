@@ -52,9 +52,10 @@ int main()
             free(input);
             break;
         }
-        commands = split_line(input);
+        //commands = split_line(input);
         int i = 0;
         int trip = 1;
+        /*
         while(i<99){
             if(commands[i] == NULL){
                 printf("ENDING\n");
@@ -65,6 +66,7 @@ int main()
             i = i +1;
         }
         free(commands);
+        */
         free(input);
     }
 
