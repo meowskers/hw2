@@ -78,7 +78,7 @@ int main()
         input = get_line();
         int words = count_commands(input);
         if(strcmp(input,"quit\n")==0){
-            printf("bye\n")
+            printf("bye\n");
             free(input);
             break;
         }
