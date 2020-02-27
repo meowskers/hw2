@@ -80,7 +80,6 @@ int main()
         if(strcmp(input,"quit\n")==0){
             printf("bye\n");
             free(input);
-            free(commands);
             free(buf);
             break;
         }
