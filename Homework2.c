@@ -28,7 +28,7 @@ char * get_line(){
     }
     return input;
 }
-char ** split_line(char* line){
+int count_commands(char* line){
     int i = 0;
     int words = 0;
     while(line[i] != '\0'){
@@ -38,18 +38,21 @@ char ** split_line(char* line){
         i = i+1 ;
     }
     words = words +1;
-
+    return words;
+}
+char ** split_line(char* line){
+    int words = count_commands(line);
     char ** input = calloc(words,sizeof(char*));
     char * token = strtok(line, " ");
     int count = 0;
     while( token != NULL){
         printf("%s\n",token);
-        //input[count] = calloc(1024,sizeof(char));
-        //strcpy(input[count],token);
+        input[count] = calloc(1024,sizeof(char));
+        strcpy(input[count],token);
         token = strtok(NULL, " ");
-        //count = count + 1;
+        count = count + 1;
     }
-    free(input);
+    
     return input;
 }
 int main()
@@ -63,10 +66,9 @@ int main()
             free(input);
             break;
         }
-        //commands = split_line(input);
-        int i = 0;
-        int trip = 1;
-        split_line(input);
+        commands = split_line(input);
+        free(input);
+        
         /*
         while(i<99){
             if(commands[i] == NULL){
@@ -79,7 +81,7 @@ int main()
         }
         free(commands);
         */
-        free(input);
+
     }
 
 
