@@ -51,6 +51,7 @@ int main()
             if(strcmp(input,"quit\n")==0){
                 printf("yes");
                 over = 0;
+                free(buf);
                 break;
             }else{
                 
