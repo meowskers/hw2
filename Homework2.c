@@ -81,6 +81,7 @@ int main()
             printf("bye\n");
             free(input);
             free(commands);
+            free(buf);
             break;
         }
         free(buf);
