@@ -69,6 +69,14 @@ int main()
     long size;
     char * buf;
     char * ptr;
+    char * my_path;
+    
+    
+    my_path = getenv("MYPATH");
+    printf("%s",my_path);
+    int path_free = count_commands(my_path,':');
+    char ** paths = split_line(my_path,":");
+    
     
     size = pathconf(".", _PC_PATH_MAX);
     while(1){
@@ -83,41 +91,48 @@ int main()
             free(buf);
             break;
         }
+        // 2D array of all commands 
         commands = split_line(input, " ");
-        //~~~~~~~~~~~~~~~~
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         //~~~~~~~~~~~~~~~~
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        //~~~~~~~~~~~~~~~~
+        // Freeing inputs
         free(buf);
         free_2d(commands,words);
         free(input);
 
-    }
 
+
+    }
+    // Freeing MYPATH
+    free_2d(paths, path_free);
+    
 
     return EXIT_SUCCESS;
 }
