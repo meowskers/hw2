@@ -29,16 +29,27 @@ char * get_line(){
     return input;
 }
 char ** split_line(char* line){
-    char ** input = calloc(100,sizeof(char*));
+    int i = 0;
+    int words = 0;
+    while(line[i] != '\0'){
+        if(line[i] == ' '){
+            words = words +1;
+        }
+        i = i+1 ;
+    }
+    words = words +1;
+
+    char ** input = calloc(words,sizeof(char*));
     char * token = strtok(line, " ");
     int count = 0;
     while( token != NULL){
         printf("%s\n",token);
-        input[count] = calloc(1024,sizeof(char));
-        strcpy(input[count],token);
+        //input[count] = calloc(1024,sizeof(char));
+        //strcpy(input[count],token);
         token = strtok(NULL, " ");
-        count = count + 1;
+        //count = count + 1;
     }
+    free(input);
     return input;
 }
 int main()
@@ -55,6 +66,7 @@ int main()
         //commands = split_line(input);
         int i = 0;
         int trip = 1;
+        split_line(input);
         /*
         while(i<99){
             if(commands[i] == NULL){
