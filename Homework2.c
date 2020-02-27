@@ -17,7 +17,7 @@ int main()
     //~~~~~~~~~~~~~
     
     
-    
+    /*
     char *text = calloc(1,1), buffer[10];
     printf("Enter a message: \n");
     while( fgets(buffer, 10 , stdin) ) 
@@ -34,7 +34,7 @@ int main()
         free(text);
     return 0;
     
-    
+    */
     
     
     
