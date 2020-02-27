@@ -34,7 +34,7 @@ char ** split_line(char* line){
     int count = 0;
     while( token != NULL){
         printf("%s\n",token);
-        input[count] = malloc(1024*sizeof(char));
+        input[count] = calloc(1024,sizeof(char));
         strcpy(input[count],token);
         token = strtok(NULL, " ");
         count = count + 1;
