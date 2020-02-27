@@ -9,5 +9,6 @@ int main()
 {
    
    int * hi = malloc(sizeof(int));
+   free(hi);
    
 }
