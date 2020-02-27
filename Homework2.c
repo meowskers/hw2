@@ -55,20 +55,27 @@ char ** split_line(char* line){
     
     return input;
 }
+void free_2d(char ** commands, int words){
+    for(int i = 0; i < words; i++){
+        free(commands[i]);
+    }
+    free(commands);
+
+}
 int main()
 {
     char * input;
     char ** commands;
     while(1){
         input = get_line();
-        
+        int words = count_commands(input);
         if(strcmp(input,"quit\n")==0){
             free(input);
             break;
         }
         commands = split_line(input);
+        free_2d(commands,words);
         free(input);
-        
         /*
         while(i<99){
             if(commands[i] == NULL){
