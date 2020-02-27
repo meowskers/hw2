@@ -8,33 +8,38 @@
 
 int main()
 {
-   /*
-    char * hi = getenv("MYPATH");
-    printf("%s\n",hi);
-    int size = pathconf(".", _PC_PATH_MAX);
-    char * buf;
-    char * ptr;
+   
+
     //~~~~~~~~~~~~~
-    */
     
-    /*
-    char *text = calloc(1,1), buffer[10];
-    printf("Enter a message: \n");
-    while( fgets(buffer, 10 , stdin) ) 
+    
+    
+    
+    char buffer[10];
+    char *input = 0;
+    size_t cur_len = 0;
+    char * yo;
+    while (fgets(buffer, sizeof(buffer), stdin) != 0 )
     {
-        text = realloc( text, strlen(text)+1+strlen(buffer) );
-        if( !text ){
-            printf("RABBLE RABBLE");
+        size_t size = sizeof(buffer) / sizeof(buffer[0]);
+        ///printf("%c",buffer[size-10]);
+        size_t buf_len = strlen(buffer);
+        char *extra = realloc(input, buf_len + cur_len + 1);
+        if (extra == 0)
+            break;
+        input = extra;
+        strcpy(input + cur_len, buffer);
+        cur_len += buf_len;
+        yo  = strpbrk(buffer,"\n");
+        if(yo!=NULL){
+            break;
         }
-       
-        strcat( text, buffer ); 
-        printf("%s\n", buffer);
+        printf("%s [%d]", input, (int)strlen(input));
     }
-        printf("\ntext:\n%s",text);
-        free(text);
-    return 0;
+    printf("%s [%d]", input, (int)strlen(input));
+    free(input);
+    //return 0;    
     
-    */
     
     
     
