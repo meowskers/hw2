@@ -8,5 +8,5 @@
 int main()
 {
 
-   int* hi = malloc(12*sizeof(int))
+   int* hi = malloc(12*sizeof(int));
 }
