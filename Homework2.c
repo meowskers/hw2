@@ -82,7 +82,7 @@ int main()
             free(input);
             break;
         }
-        
+        free(buf);
         commands = split_line(input);
         free_2d(commands,words);
         free(input);
