@@ -33,20 +33,20 @@ int main()
 {
    
 
-    char* yo = get_line();
-    printf("%s", yo);
-    free(yo);
+
     
+    char * ptr;
+    char * buf;
+    long size;
+    size = pathconf(".", _PC_PATH_MAX);
     
-    //~~~~~~~~~~~
-    /*
     char input[10];
     int over = 1;
     while(over){
         if ((buf = (char *)malloc((size_t)size)) != NULL){
             ptr = getcwd(buf, (size_t)size);
         }
-        printf("%s ",ptr);
+        printf("%s$ ",ptr);
         if(fgets(input,10,stdin)){
             if(strcmp(input,"exit\n")==0){
                 printf("yes");
@@ -58,8 +58,8 @@ int main()
         } else {
             printf("Something went wrong!!!\n");
         }
-        
+       
     }
-    */
+    free(buf);
     return EXIT_SUCCESS;
 }
