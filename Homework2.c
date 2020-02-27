@@ -48,7 +48,7 @@ int main()
         }
         printf("%s$ ",ptr);
         if(fgets(input,10,stdin)){
-            if(strcmp(input,"exit\n")==0){
+            if(strcmp(input,"quit\n")==0){
                 printf("yes");
                 over = 0;
                 break;
