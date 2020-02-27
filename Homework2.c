@@ -93,9 +93,14 @@ int main()
         }
         // 2D array of all commands 
         commands = split_line(input, " ");
-        
-        //~~~~~~~~~~~~~~~~
 
+        //~~~~~~~~~~~~~~~~
+        for(int i = 0; i < words; i++){
+            
+            if(strcmp(commands[i],"|")==0){
+                printf("PIPELINE");
+            }
+        }
         
         
         
