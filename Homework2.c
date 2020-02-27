@@ -58,8 +58,7 @@ int main()
         } else {
             printf("Something went wrong!!!\n");
         }
-       
+        free(buf);
     }
-    free(buf);
     return EXIT_SUCCESS;
 }
