@@ -29,12 +29,12 @@ char * get_line(){
     return input;
 }
 char ** split_line(char* line){
-    char ** input = (char**)calloc(100,sizeof(char*));
+    char ** input = calloc(100,sizeof(char*));
     char * token = strtok(line, " ");
     int count = 0;
     while( token != NULL){
         printf("%s\n",token);
-        input[count] = (char *)malloc(1024*sizeof(char));
+        input[count] = malloc(1024*sizeof(char));
         strcpy(input[count],token);
         token = strtok(NULL, " ");
         count = count + 1;
