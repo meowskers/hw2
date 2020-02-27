@@ -31,10 +31,29 @@ char * get_line(){
 }
 int main()
 {
-   
-
-
+   /*
+    printf("%s",get_line());
+    char * ptr;
+    char * buf;
+    long size;
+    size = pathconf(".", _PC_PATH_MAX);
     
+    char input[10];
+    */
+    
+    char * hi;
+    while(1){
+        hi = get_line();
+        printf("%s",hi);
+        if(strcmp(hi,"quit\n")==0){
+            free(hi);
+            break;
+        }
+        free(hi);
+       
+    }
+
+    /*
     char * ptr;
     char * buf;
     long size;
@@ -61,5 +80,6 @@ int main()
         }
         free(buf);
     }
+    */
     return EXIT_SUCCESS;
 }
