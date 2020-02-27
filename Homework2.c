@@ -28,11 +28,11 @@ char * get_line(){
     }
     return input;
 }
-int count_commands(char* line){
+int count_commands(char* line, char delim){
     int i = 0;
     int words = 0;
     while(line[i] != '\0'){
-        if(line[i] == ' '){
+        if(line[i] == delim){
             words = words +1;
         }
         i = i+1 ;
@@ -40,16 +40,16 @@ int count_commands(char* line){
     words = words +1;
     return words;
 }
-char ** split_line(char* line){
-    int words = count_commands(line);
+char ** split_line(char* line, char delim){
+    int words = count_commands(line,' ');
     char ** input = calloc(words,sizeof(char*));
-    char * token = strtok(line, " ");
+    char * token = strtok(line, &delim);
     int count = 0;
     while( token != NULL){
         printf("%s\n",token);
         input[count] = calloc(1024,sizeof(char));
         strcpy(input[count],token);
-        token = strtok(NULL, " ");
+        token = strtok(NULL, &delim);
         count = count + 1;
     }
     
@@ -76,14 +76,14 @@ int main()
             ptr = getcwd(buf, (size_t)size);
         printf("%s$ ",ptr);
         input = get_line();
-        int words = count_commands(input);
+        int words = count_commands(input,' ');
         if(strcmp(input,"quit\n")==0){
             printf("bye\n");
             free(input);
             free(buf);
             break;
         }
-        commands = split_line(input);
+        commands = split_line(input,' ');
         //~~~~~~~~~~~~~~~~
         
         
