@@ -98,9 +98,11 @@ int main()
     char * buf;
     char * ptr;
     char * my_path;
+    char * home;
     
     
     my_path = getenv("MYPATH");
+    home = getenv("HOME");
     //printf("%s",my_path);
     int path_free = count_commands(my_path,':');
     char ** paths = split_line(my_path,":");
@@ -137,7 +139,15 @@ int main()
         if(strcmp(commands[words-1],"&")==0){
             BACKGROUND = 1;
         }
-        if(PIPELINE && BACKGROUND){
+        if(strcmp(commands[0],"cd")==0){
+            if(words == 1){
+                chdir(home);
+                printf("setting to home\n");
+            }else{
+                chdir(commands[1]);
+                printf(" setting to something else\n");
+            }
+        }else if(PIPELINE && BACKGROUND){
             printf("ITS A BACKGROUND PIPELINE\n");
             
             
@@ -156,21 +166,7 @@ int main()
             
             
         }else{
-            //printf("ITS A NORMAL COMMAND\n");
-            /*
-            struct stat buffer;
-            int status;
-            int is_command = 0;
-            for(int i = 0; i < path_free; i++){
-                char* temp = triconcat(paths[i],"/",commands[0]);
-                status = lstat(temp, &buffer);
-                if(status==0){
-                    is_command = 1;
-                    strcpy(commands[0], temp);
-                }
-                free(temp);
-            }    
-            */
+            // NORMAL COMMAND 
             int is_command = get_commands(commands,paths,path_free);
             if(is_command){
                  pid_t child_pid, w;
