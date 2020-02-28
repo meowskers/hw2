@@ -142,11 +142,15 @@ int main()
             if(words == 1){
                 chdir(home);
             }else{
-                char * directory = calloc(1024,sizeof(char));
-                strcpy(directory,ptr);
-                strcat(directory,commands[1]);
-                chdir(directory);
-                free(directory);
+                if(strcmp(commands[1],"..")==0){
+                    chdir(commands[1]);
+                }else{
+                    char * directory = calloc(1024,sizeof(char));
+                    strcpy(directory,ptr);
+                    strcat(directory,commands[1]);
+                    chdir(directory);
+                    free(directory);
+                }
             }
             
         }else if(PIPELINE && BACKGROUND){
