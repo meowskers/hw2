@@ -50,9 +50,9 @@ char ** split_pipe(char*line){
     pch = strchr(line,'|');
     strncpy(input[0],line,pch-line-1);
     int len = strlen(line)-strlen(pch);
-    strncpy(input[1],line+strlen(pch)+1,len);
+    int temp = pch-line+2;
+    strncpy(input[1],line+temp,len);
     /*
-    printf("%d\n",len);
     printf("found at %ld\n",pch-line+1);
     printf("FIRST: %s\n",input[0]);
     printf("SECOND: %s\n",input[1]);
@@ -92,7 +92,6 @@ char * triconcat(char*first, char* second, char* third){
     
 }
 int get_commands(char ** commands, char ** paths,int path_free){
-    //printf("ITS A NORMAL COMMAND\n");
     struct stat buffer;
     int status;
     for(int i = 0; i < path_free; i++){
@@ -112,8 +111,10 @@ int main()
     setvbuf(stdout,NULL,_IONBF,0);
     char * input;
     char ** commands;
-    char ** pipeline_commands;
-    char ** p_c_temp;
+    char ** temp_p;
+    char ** pipeline_commands1;
+    char ** pipeline_commands2;
+    
     long size;
     char * buf;
     char * ptr;
@@ -149,13 +150,7 @@ int main()
             }
         }
         if(PIPELINE){
-            p_c_temp = split_pipe(input);
-            
-            printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
-            //printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
-            free(p_c_temp[0]);
-            free(p_c_temp[1]);
-            free(p_c_temp);
+            temp_p = split_pipe(input);
         }
         
         // 2D array of all commands 
@@ -191,11 +186,22 @@ int main()
             printf("ITS A BACKGROUND PIPELINE\n");
             
             
-            
+            free(temp_p[0]);
+            free(temp_p[1]);
+            free(temp_p);
         }else if(PIPELINE){
+            int words1 = count_commands(temp_p[0],' ');
+            int words2 = count_commands(temp_p[1],' ');
+            pipeline_commands1 = split_line(temp_p[0], " ");
+            pipeline_commands2 = split_line(temp_p[1], " ");
+
+
+            // YOU NEED TO WRITE TWO PIPES
+            
             /*
+            
             pid_t child_pid;
-            int is_command = get_commands(commands,paths,path_free);
+            int is_command1 = get_commands(commands,paths,path_free);
             if(is_command){
                  child_pid = fork();
                  if(child_pid<0){
@@ -218,8 +224,11 @@ int main()
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
             }
-            
             */
+            
+            free(temp_p[0]);
+            free(temp_p[1]);
+            free(temp_p);
             
         }else if(BACKGROUND){
         
