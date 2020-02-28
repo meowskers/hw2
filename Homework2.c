@@ -161,6 +161,7 @@ int main()
             
             
         }else if(BACKGROUND){
+        /*
             int is_command = get_commands(commands,paths,path_free);
             commands[words-1] = NULL;           
             if(is_command){
@@ -181,7 +182,7 @@ int main()
                     pid= fork();
                     if(pid == 0){
                     */
-                        execv(commands[0],commands);    
+                       // execv(commands[0],commands);    
                     /*
                     }else{
                       // Parent
@@ -196,12 +197,12 @@ int main()
                         free_2d(paths, path_free);
                         return EXIT_SUCCESS;
                     }
-                    */
+                    // extra one here
                 }
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
             }
-            
+            */
             
         }else{
             // NORMAL COMMAND 
