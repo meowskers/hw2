@@ -43,8 +43,9 @@ int count_commands(char* line, char delim){
     return words;
 }
 char ** split_line(char* line, char* delim){
+    line[strcspn(line,"\n")] = '\0';
     int words = count_commands(line,delim[0]);
-    char ** input = calloc(words,sizeof(char*));
+    char ** input = calloc(words+1,sizeof(char*));
     char * token = strtok(line, delim);
     int count = 0;
     while( token != NULL){
@@ -53,6 +54,7 @@ char ** split_line(char* line, char* delim){
         token = strtok(NULL, delim);
         count = count + 1;
     }
+    input[count] = NULL;
     
     return input;
 }
@@ -104,6 +106,9 @@ int main()
         }
         // 2D array of all commands 
         commands = split_line(input, " ");
+        for(int i = 0; i < words+1; i++){
+             printf("$%s$\n",commands[i]);
+        }
         int PIPELINE = 0;
         int BACKGROUND = 0;
         // Check if it is a Pipeline or background or both process
@@ -165,8 +170,13 @@ int main()
                  }
                  if(child_pid == 0){
                      //printf("CHILD\n");
-                     execv(actual_command,commands);
-                     
+                     /*
+                     char * ac[3];
+                     ac[0] = "/bin/ls";
+                     ac[1] = "-l";
+                     ac[2] = NULL;
+                     */
+                     execv(commands[0],commands);
                      
                      
                      
