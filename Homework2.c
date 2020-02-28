@@ -185,6 +185,7 @@ int main()
                      free_2d(commands,words);
                      free(input);
                      free_2d(paths, path_free);
+                     printf("CHILD FINISHED\n");
                      return EXIT_SUCCESS;
                  }else{
                      do {
@@ -192,7 +193,7 @@ int main()
                          if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
                          
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
-                     //printf("PARENT\n");
+                     printf("PARENT FINISHED\n");
                      
                  }
             }else{
