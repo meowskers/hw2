@@ -164,6 +164,11 @@ int main()
                  }
                  if(child_pid == 0){
                      printf("CHILD\n");
+                     free(actual_command);
+                     free(buf);
+                     free_2d(commands,words);
+                     free(input);
+                     free_2d(paths, path_free);
                      return EXIT_SUCCESS;
                  }else{
                      do {
