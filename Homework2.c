@@ -118,7 +118,7 @@ int main()
                 PIPELINE = 1;
             }
         }
-        if(strcmp(commands[words-1],"&\n")==0){
+        if(strcmp(commands[words-1],"&")==0){
             BACKGROUND = 1;
         }
         if(PIPELINE && BACKGROUND){
