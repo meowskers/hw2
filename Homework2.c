@@ -161,8 +161,9 @@ int main()
             
             
         }else if(BACKGROUND){
-        /*
+        
             int is_command = get_commands(commands,paths,path_free);
+            free(commands[words]);
             commands[words-1] = NULL;           
             if(is_command){
                 pid_t child_pid, w;
@@ -177,13 +178,11 @@ int main()
                     // Child
                     
                     printf("[running background process \"%s\"]\n",commands[0]);
-                    /*
+                    
                     int pid, q;
                     pid= fork();
                     if(pid == 0){
-                    */
-                       // execv(commands[0],commands);    
-                    /*
+                        execv(commands[0],commands);    
                     }else{
                       // Parent
                         do {
@@ -197,12 +196,12 @@ int main()
                         free_2d(paths, path_free);
                         return EXIT_SUCCESS;
                     }
-                    // extra one here
+              
                 }
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
             }
-            */
+            
             
         }else{
             // NORMAL COMMAND 
