@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <sys/stat.h>
 
 char * get_line(){
     char buffer[10];
@@ -62,6 +63,15 @@ void free_2d(char ** commands, int words){
     free(commands);
 
 }
+char * triconcat(char*first, char* second, char* third){
+    char * temp = calloc(1024,sizeof(char));
+    strcpy(temp,first);
+    strcat(temp, second);
+    char* token = strtok(third,"\n");
+    strcat(temp, third);
+    return temp;
+    
+}
 int main()
 {
     char * input;
@@ -106,6 +116,11 @@ int main()
             BACKGROUND = 1;
         }
         //~~~~~~~~~~~~~~~~
+        /*
+        for(int i = 0; i < path_free;i++){
+            printf("%s\n",paths[i]);
+        }
+        */
         if(PIPELINE && BACKGROUND){
             printf("ITS A BACKGROUND PIPELINE\n");
             
@@ -126,9 +141,29 @@ int main()
             
         }else{
             printf("ITS A NORMAL COMMAND\n");
+            struct stat buffer;
+            int status;
+            int is_command = 0;
+            char * actual_command = calloc(1024,sizeof(char));
+            for(int i = 0; i < path_free; i++){
+                char* temp = triconcat(paths[i],"/",commands[0]);
+                //printf("*%s*\n",temp);
+                
+                status = lstat(temp, &buffer);
+                //printf("##%d##\n",status);
+                if(status==0){
+                    is_command = 1;
+                    strcpy(actual_command,temp);
+                    //printf("YOOOO\n");
+                }
+                free(temp);
+            }     
+            if(is_command){
             
-            
-            
+            }else{
+                printf("ERROR: '%s' is not a command!\n",commands[0]); 
+            }
+            free(actual_command);
             
             
         }
