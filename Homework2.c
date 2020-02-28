@@ -190,19 +190,21 @@ int main()
             free(temp_p[1]);
             free(temp_p);
         }else if(PIPELINE){
+            pid_t child_pid;
             int words1 = count_commands(temp_p[0],' ');
             int words2 = count_commands(temp_p[1],' ');
             pipeline_commands1 = split_line(temp_p[0], " ");
             pipeline_commands2 = split_line(temp_p[1], " ");
-
-
-            // YOU NEED TO WRITE TWO PIPES
+            free(temp_p[0]);
+            free(temp_p[1]);
+            free(temp_p);
             
-            /*
+            int is_command1 = get_commands(pipeline_commands1,paths,path_free);
+            int is_command2 = get_commands(pipeline_commands2,paths,path_free);
             
-            pid_t child_pid;
-            int is_command1 = get_commands(commands,paths,path_free);
-            if(is_command){
+            if(is_command1 && is_command2){
+                 int p[2];
+                 pipe(p);
                  child_pid = fork();
                  if(child_pid<0){
                      printf("FAILED TO FORK");
@@ -210,6 +212,8 @@ int main()
                  }
                  if(child_pid == 0){
                      // Child
+                     pid_t kid_pid;
+                     
                      execv(commands[0],commands);
                  }else{
                      // Parent
@@ -222,13 +226,14 @@ int main()
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
                  }
             }else{
-                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+                if(is_command1){
+                    fprintf(stderr,"ERROR: '%s' is not a command!\n",pipeline_command2[0]); 
+                } else {
+                    fprintf(stderr,"ERROR: '%s' is not a command!\n",pipeline_command1[0]); 
+                }
             }
-            */
             
-            free(temp_p[0]);
-            free(temp_p[1]);
-            free(temp_p);
+            
             free_2d(pipeline_commands1,words1);
             free_2d(pipeline_commands2,words2);
         }else if(BACKGROUND){
