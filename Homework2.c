@@ -140,7 +140,7 @@ int main()
             
             
         }else{
-            printf("ITS A NORMAL COMMAND\n");
+            //printf("ITS A NORMAL COMMAND\n");
             struct stat buffer;
             int status;
             int is_command = 0;
@@ -151,6 +151,7 @@ int main()
                 if(status==0){
                     is_command = 1;
                     strcpy(actual_command,temp);
+                    strcpy(commands[0], temp);
                 }
                 free(temp);
             }     
@@ -163,7 +164,12 @@ int main()
                      return -1;
                  }
                  if(child_pid == 0){
-                     printf("CHILD\n");
+                     //printf("CHILD\n");
+                     execv(actual_command,commands);
+                     
+                     
+                     
+                     
                      free(actual_command);
                      free(buf);
                      free_2d(commands,words);
@@ -176,7 +182,7 @@ int main()
                          if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
                          
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
-                     printf("PARENT\n");
+                     //printf("PARENT\n");
                      
                  }
             }else{
