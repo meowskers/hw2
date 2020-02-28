@@ -163,7 +163,7 @@ int main()
         }else if(BACKGROUND){
         
             int is_command = get_commands(commands,paths,path_free);
-            free(commands[words]);
+            free(commands[words-1]);
             commands[words-1] = NULL;           
             if(is_command){
                 pid_t child_pid, w;
