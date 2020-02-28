@@ -161,15 +161,9 @@ int main()
             
             
         }else if(BACKGROUND){
-            //strcpy(commands[words-1],NULL);
-            //commands[strcspn(commands," &")] = '\0';
             int is_command = get_commands(commands,paths,path_free);
-            //printf("@%s@\n",commands[words-1]);
-            commands[words-1] = NULL;
-            //printf("@%s@\n",commands[words-1]);
-            
+            commands[words-1] = NULL;           
             if(is_command){
-                //printf("CHECK 1");
                 pid_t child_pid, w;
                 int child_status;
                 int kid_status;
@@ -178,17 +172,17 @@ int main()
                     printf("FAILED TO FORK");
                     return -1;
                 }
-                //printf("CHECK 3\n");
-                //printf("$$$$$$  %d  $$$$$",child_pid);
                 if(child_pid == 0){
-                    //printf("CHECK 2");
                     // Child
-                    sleep(1);
+                    
                     printf("[running background process \"%s\"]\n",commands[0]);
+                    /*
                     int pid, q;
                     pid= fork();
                     if(pid == 0){
+                    */
                         execv(commands[0],commands);    
+                    /*
                     }else{
                       // Parent
                         do {
@@ -202,8 +196,7 @@ int main()
                         free_2d(paths, path_free);
                         return EXIT_SUCCESS;
                     }
-                }else{
-                    sleep(2);
+                    */
                 }
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
