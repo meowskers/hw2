@@ -106,8 +106,9 @@ int main()
         }
         // 2D array of all commands 
         commands = split_line(input, " ");
-        for(int i = 0; i < words+1; i++){
-             printf("$%s$\n",commands[i]);
+        if(commands[0]==NULL){
+            fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]);
+            continue;
         }
         int PIPELINE = 0;
         int BACKGROUND = 0;
@@ -120,12 +121,6 @@ int main()
         if(strcmp(commands[words-1],"&\n")==0){
             BACKGROUND = 1;
         }
-        //~~~~~~~~~~~~~~~~
-        /*
-        for(int i = 0; i < path_free;i++){
-            printf("%s\n",paths[i]);
-        }
-        */
         if(PIPELINE && BACKGROUND){
             printf("ITS A BACKGROUND PIPELINE\n");
             
@@ -169,36 +164,17 @@ int main()
                      return -1;
                  }
                  if(child_pid == 0){
-                     //printf("CHILD\n");
-                     /*
-                     char * ac[3];
-                     ac[0] = "/bin/ls";
-                     ac[1] = "-l";
-                     ac[2] = NULL;
-                     */
-                     printf("CHILD STARTING\n");
-                     int j = execv(commands[0],commands); 
-                     printf("CHILD MIDDLE\n");
-                     
-                     /*
-                     free(actual_command);
-                     free(buf);
-                     free_2d(commands,words);
-                     free(input);
-                     free_2d(paths, path_free);
-                     */
+                     // Child
+                     execv(commands[0],commands);             
                      printf("CHILD FINISHED\n");
                      return EXIT_SUCCESS;
                  }else{
-                     /*
+                     // Parent
                      do {
                          w = waitpid(child_pid, &child_status,0);
                          if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
                          
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
-                     */
-                     printf("PARENT FINISHED\n");
-                     
                  }
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
