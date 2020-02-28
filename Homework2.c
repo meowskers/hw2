@@ -41,6 +41,24 @@ int count_commands(char* line, char delim){
     words = words +1;
     return words;
 }
+char ** split_pipe(char*line){
+    line[strcspn(line,"\n")] = '\0';
+    char ** input = calloc(2,sizeof(char*));
+    input[0] = calloc(1024,sizeof(char));
+    input[1] = calloc(1024,sizeof(char));
+    char * pch;
+    pch = strchr(line,'|');
+    strncpy(input[0],line,pch-line-1);
+    int len = strlen(line)-strlen(pch);
+    strncpy(input[1],line+strlen(pch)+1,len);
+    /*
+    printf("%d\n",len);
+    printf("found at %ld\n",pch-line+1);
+    printf("FIRST: %s\n",input[0]);
+    printf("SECOND: %s\n",input[1]);
+    */
+    return input;
+}
 char ** split_line(char* line, char* delim){
     line[strcspn(line,"\n")] = '\0';
     int words = count_commands(line,delim[0]);
@@ -93,7 +111,10 @@ int main()
 {
     setvbuf(stdout,NULL,_IONBF,0);
     char * input;
+    char * input_copy;
     char ** commands;
+    char ** pipeline_commands;
+    char ** p_c_temp;
     long size;
     char * buf;
     char * ptr;
@@ -109,11 +130,15 @@ int main()
     
     size = pathconf(".", _PC_PATH_MAX);
     while(1){
-
+        int PIPELINE = 0;
+        int BACKGROUND = 0;
         if ((buf = (char *)malloc((size_t)size)) != NULL)
             ptr = getcwd(buf, (size_t)size);
         printf("%s$ ",ptr);
         input = get_line();
+        input_copy = malloc(strlen(input)+1);
+        strcpy(input_copy,input);
+        //printf("#%s#\n",input_copy);
         int words = count_commands(input,' ');
         if(strcmp(input,"quit\n")==0){
             printf("bye\n");
@@ -121,20 +146,33 @@ int main()
             free(buf);
             break;
         }
+        // Check if it a Pipeline
+        for(int i = 0; input[i]; i++){
+            if(input[i]=='|'){
+                PIPELINE = 1;
+                //printf("%s\n",input_copy);
+            }
+        }
+        if(PIPELINE){
+            p_c_temp = split_pipe(input);
+            printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
+            //printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
+            free(p_c_temp[0]);
+            free(p_c_temp[1]);
+            free(p_c_temp);
+        }
+        
         // 2D array of all commands 
         commands = split_line(input, " ");
+        
+        // If no commands return Error
         if(commands[0]==NULL){
             fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]);
             continue;
         }
-        int PIPELINE = 0;
-        int BACKGROUND = 0;
-        // Check if it is a Pipeline or background or both process
-        for(int i = 0; i < words; i++){
-            if(strcmp(commands[i],"|")==0){
-                PIPELINE = 1;
-            }
-        }
+
+        // Check if it is a background 
+
         if(strcmp(commands[words-1],"&")==0){
             BACKGROUND = 1;
         }
@@ -158,7 +196,7 @@ int main()
             
             
             
-            
+            free(input_copy);
         }else if(PIPELINE){
             /*
             pid_t child_pid;
@@ -187,7 +225,7 @@ int main()
             }
             
             */
-            
+            free(input_copy);
             
         }else if(BACKGROUND){
         
