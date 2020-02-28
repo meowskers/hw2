@@ -93,18 +93,22 @@ int main()
 {
     setvbuf(stdout,NULL,_IONBF,0);
     char * input;
+    char * input_copy;
     char ** commands;
+    char ** pipe_commands;
     long size;
     char * buf;
     char * ptr;
     char * my_path;
     char * home;
-    
+    int PIPELINE = 0;
+    int BACKGROUND = 0;
     
     my_path = getenv("MYPATH");
     home = getenv("HOME");
     int path_free = count_commands(my_path,':');
     char ** paths = split_line(my_path,":");
+
     
     
     size = pathconf(".", _PC_PATH_MAX);
@@ -121,19 +125,27 @@ int main()
             free(buf);
             break;
         }
+        int l = 0;
+        for(l = 0; input[l]; l++){
+            if(input[l]=='|'){
+                PIPELINE = 1;
+                input_copy = "1";
+                break;
+            }
+        }
         // 2D array of all commands 
         commands = split_line(input, " ");
         if(commands[0]==NULL){
-            fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]);
+            fprintf(stderr,"ERROR: command \"%s\" not found\n",commands[0]);
             continue;
         }
-        int PIPELINE = 0;
-        int BACKGROUND = 0;
+
         // Check if it is a Pipeline or background or both process
-        for(int i = 0; i < words; i++){
-            if(strcmp(commands[i],"|")==0){
-                PIPELINE = 1;
-            }
+
+        if(PIPELINE){
+            pipe_commands = split_line(input,"|");
+            printf("**%s**\n",input);
+            printf("1. %s\n 2. %s\n",pipe_commands[0],pipe_commands[1]);
         }
         if(strcmp(commands[words-1],"&")==0){
             BACKGROUND = 1;
@@ -142,7 +154,11 @@ int main()
             if(words == 1){
                 chdir(home);
             }else{
-                chdir(commands[1]);
+                char * directory = calloc(1024,sizeof(char));
+                strcpy(directory,ptr);
+                strcat(directory,commands[1]);
+                chdir(directory);
+                free(directory);
             }
             
         }else if(PIPELINE && BACKGROUND){
@@ -175,7 +191,7 @@ int main()
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
                  }
             }else{
-                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: command \"%s\" not found\n",commands[0]);
             }
             
             */
@@ -225,7 +241,7 @@ int main()
               
                 }
             }else{
-                fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: command \"%s\" not found\n",commands[0]);
             }
             
             
@@ -252,7 +268,7 @@ int main()
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
                  }
             }else{
-                fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: command \"%s\" not found\n",commands[0]);
             }
             
             
