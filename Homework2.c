@@ -147,21 +147,35 @@ int main()
             char * actual_command = calloc(1024,sizeof(char));
             for(int i = 0; i < path_free; i++){
                 char* temp = triconcat(paths[i],"/",commands[0]);
-                //printf("*%s*\n",temp);
-                
                 status = lstat(temp, &buffer);
-                //printf("##%d##\n",status);
                 if(status==0){
                     is_command = 1;
                     strcpy(actual_command,temp);
-                    //printf("YOOOO\n");
                 }
                 free(temp);
             }     
             if(is_command){
-            
+                 pid_t child_pid, w;
+                 int child_status;
+                 child_pid = fork();
+                 if(child_pid<0){
+                     printf("FAILED TO FORK");
+                     return -1;
+                 }
+                 if(child_pid == 0){
+                     printf("CHILD\n");
+                     return EXIT_SUCCESS;
+                 }else{
+                     do {
+                         w = waitpid(child_pid, &child_status,0);
+                         if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
+                         
+                     } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
+                     printf("PARENT\n");
+                     
+                 }
             }else{
-                printf("ERROR: '%s' is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
             }
             free(actual_command);
             
