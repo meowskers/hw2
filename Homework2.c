@@ -13,7 +13,6 @@ char * get_line(){
     char * yo;
     while (fgets(buffer, sizeof(buffer), stdin) != 0 )
     {
-        size_t size = sizeof(buffer) / sizeof(buffer[0]);
         size_t buf_len = strlen(buffer);
         char *extra = realloc(input, buf_len + cur_len + 1);
         if (extra == 0){
@@ -70,7 +69,7 @@ char * triconcat(char*first, char* second, char* third){
     strcpy(temp,first);
     strcat(temp, second);
     char* token = strtok(third,"\n");
-    strcat(temp, third);
+    strcat(temp, token);
     return temp;
     
 }
@@ -104,7 +103,6 @@ int main()
     
     my_path = getenv("MYPATH");
     home = getenv("HOME");
-    //printf("%s",my_path);
     int path_free = count_commands(my_path,':');
     char ** paths = split_line(my_path,":");
     
@@ -126,7 +124,7 @@ int main()
         // 2D array of all commands 
         commands = split_line(input, " ");
         if(commands[0]==NULL){
-            fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]);
+            fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]);
             continue;
         }
         int PIPELINE = 0;
@@ -143,11 +141,10 @@ int main()
         if(strcmp(commands[0],"cd")==0){
             if(words == 1){
                 chdir(home);
-                printf("setting to home\n");
             }else{
                 chdir(commands[1]);
-                printf(" setting to something else\n");
             }
+            
         }else if(PIPELINE && BACKGROUND){
             printf("ITS A BACKGROUND PIPELINE\n");
             
@@ -155,9 +152,33 @@ int main()
             
             
         }else if(PIPELINE){
-            printf("ITS A PIPELINE\n");
+            /*
+            pid_t child_pid;
+            int is_command = get_commands(commands,paths,path_free);
+            if(is_command){
+                 child_pid = fork();
+                 if(child_pid<0){
+                     printf("FAILED TO FORK");
+                     return -1;
+                 }
+                 if(child_pid == 0){
+                     // Child
+                     execv(commands[0],commands);
+                 }else{
+                     // Parent
+                     pid_t w;
+                     int child_status;
+                     do {
+                         w = waitpid(child_pid, &child_status,0);
+                         if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
+                         
+                     } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
+                 }
+            }else{
+                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+            }
             
-            
+            */
             
             
         }else if(BACKGROUND){
@@ -166,8 +187,7 @@ int main()
             free(commands[words-1]);
             commands[words-1] = NULL;           
             if(is_command){
-                pid_t child_pid, w;
-                int child_status;
+                pid_t child_pid;
                 int kid_status;
                 child_pid = fork();
                 if(child_pid<0){
@@ -180,8 +200,6 @@ int main()
                     printf("[running background process \"%s\"]\n",commands[0]);
                     
                     int pid, q;
-                    int p[2];
-                    int rc = pipe(p);
                     pid= fork();
                     if(pid == 0){
                         execv(commands[0],commands);
@@ -207,7 +225,7 @@ int main()
               
                 }
             }else{
-                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]); 
             }
             
             
@@ -234,7 +252,7 @@ int main()
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
                  }
             }else{
-                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+                fprintf(stderr,"ERROR: \"%s\" is not a command!\n",commands[0]); 
             }
             
             
