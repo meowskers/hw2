@@ -92,6 +92,7 @@ int get_commands(char ** commands, char ** paths,int path_free){
 }
 int main()
 {
+    setvbuf(stdout,NULL,_IONBF,0);
     char * input;
     char ** commands;
     long size;
@@ -160,9 +161,53 @@ int main()
             
             
         }else if(BACKGROUND){
-            printf("ITS A BACKGROUND\n");
+            //strcpy(commands[words-1],NULL);
+            //commands[strcspn(commands," &")] = '\0';
+            int is_command = get_commands(commands,paths,path_free);
+            //printf("@%s@\n",commands[words-1]);
+            commands[words-1] = NULL;
+            //printf("@%s@\n",commands[words-1]);
             
-            
+            if(is_command){
+                //printf("CHECK 1");
+                pid_t child_pid, w;
+                int child_status;
+                int kid_status;
+                child_pid = fork();
+                if(child_pid<0){
+                    printf("FAILED TO FORK");
+                    return -1;
+                }
+                //printf("CHECK 3\n");
+                //printf("$$$$$$  %d  $$$$$",child_pid);
+                if(child_pid == 0){
+                    //printf("CHECK 2");
+                    // Child
+                    sleep(1);
+                    printf("[running background process \"%s\"]\n",commands[0]);
+                    int pid, q;
+                    pid= fork();
+                    if(pid == 0){
+                        execv(commands[0],commands);    
+                    }else{
+                      // Parent
+                        do {
+                            q = waitpid(pid, &kid_status,0);
+                            if (q == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
+                        } while( !WIFEXITED(kid_status)&&!WIFSIGNALED(kid_status));
+                        printf("[process %d terminated with exit status 0]\n",pid);
+                        free(buf);
+                        free_2d(commands,words);
+                        free(input);
+                        free_2d(paths, path_free);
+                        return EXIT_SUCCESS;
+                    }
+                }else{
+                    sleep(2);
+                }
+            }else{
+                fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
+            }
             
             
         }else{
@@ -178,9 +223,7 @@ int main()
                  }
                  if(child_pid == 0){
                      // Child
-                     execv(commands[0],commands);             
-                     printf("CHILD FINISHED\n");
-                     return EXIT_SUCCESS;
+                     execv(commands[0],commands);
                  }else{
                      // Parent
                      do {
