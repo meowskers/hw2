@@ -111,7 +111,6 @@ int main()
 {
     setvbuf(stdout,NULL,_IONBF,0);
     char * input;
-    char * input_copy;
     char ** commands;
     char ** pipeline_commands;
     char ** p_c_temp;
@@ -136,9 +135,6 @@ int main()
             ptr = getcwd(buf, (size_t)size);
         printf("%s$ ",ptr);
         input = get_line();
-        input_copy = malloc(strlen(input)+1);
-        strcpy(input_copy,input);
-        //printf("#%s#\n",input_copy);
         int words = count_commands(input,' ');
         if(strcmp(input,"quit\n")==0){
             printf("bye\n");
@@ -150,11 +146,11 @@ int main()
         for(int i = 0; input[i]; i++){
             if(input[i]=='|'){
                 PIPELINE = 1;
-                //printf("%s\n",input_copy);
             }
         }
         if(PIPELINE){
             p_c_temp = split_pipe(input);
+            
             printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
             //printf("%s\n%s\n",p_c_temp[0],p_c_temp[1]);
             free(p_c_temp[0]);
@@ -196,7 +192,6 @@ int main()
             
             
             
-            free(input_copy);
         }else if(PIPELINE){
             /*
             pid_t child_pid;
@@ -225,7 +220,6 @@ int main()
             }
             
             */
-            free(input_copy);
             
         }else if(BACKGROUND){
         
