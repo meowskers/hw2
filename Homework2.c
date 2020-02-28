@@ -180,9 +180,17 @@ int main()
                     printf("[running background process \"%s\"]\n",commands[0]);
                     
                     int pid, q;
+                    int p[2];
+                    int rc = pipe(p);
                     pid= fork();
                     if(pid == 0){
-                        execv(commands[0],commands);    
+                        execv(commands[0],commands);
+                        printf("[process %d terminated abnormally]",pid);
+                        free(buf);
+                        free_2d(commands,words);
+                        free(input);
+                        free_2d(paths, path_free);
+                        return -1;
                     }else{
                       // Parent
                         do {
