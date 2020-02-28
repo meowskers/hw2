@@ -176,23 +176,27 @@ int main()
                      ac[1] = "-l";
                      ac[2] = NULL;
                      */
-                     execv(commands[0],commands);
+                     printf("CHILD STARTING\n");
+                     int j = execv(commands[0],commands); 
+                     printf("CHILD MIDDLE\n");
                      
-                     
-                     
+                     /*
                      free(actual_command);
                      free(buf);
                      free_2d(commands,words);
                      free(input);
                      free_2d(paths, path_free);
+                     */
                      printf("CHILD FINISHED\n");
                      return EXIT_SUCCESS;
                  }else{
+                     /*
                      do {
                          w = waitpid(child_pid, &child_status,0);
                          if (w == -1) { perror("waitpid"); exit(EXIT_FAILURE); }
                          
                      } while( !WIFEXITED(child_status)&&!WIFSIGNALED(child_status));
+                     */
                      printf("PARENT FINISHED\n");
                      
                  }
