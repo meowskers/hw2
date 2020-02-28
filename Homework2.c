@@ -229,7 +229,8 @@ int main()
             free(temp_p[0]);
             free(temp_p[1]);
             free(temp_p);
-            
+            free_2d(pipeline_commands1,words1);
+            free_2d(pipeline_commands2,words2);
         }else if(BACKGROUND){
         
             int is_command = get_commands(commands,paths,path_free);
