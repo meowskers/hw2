@@ -74,6 +74,22 @@ char * triconcat(char*first, char* second, char* third){
     return temp;
     
 }
+int get_commands(char ** commands, char ** paths,int path_free){
+    //printf("ITS A NORMAL COMMAND\n");
+    struct stat buffer;
+    int status;
+    for(int i = 0; i < path_free; i++){
+        char* temp = triconcat(paths[i],"/",commands[0]);
+        status = lstat(temp, &buffer);
+        if(status==0){
+            strcpy(commands[0], temp);
+            free(temp);
+            return 1;
+        }
+        free(temp);
+    }     
+    return 0;
+}
 int main()
 {
     char * input;
@@ -141,20 +157,21 @@ int main()
             
         }else{
             //printf("ITS A NORMAL COMMAND\n");
+            /*
             struct stat buffer;
             int status;
             int is_command = 0;
-            char * actual_command = calloc(1024,sizeof(char));
             for(int i = 0; i < path_free; i++){
                 char* temp = triconcat(paths[i],"/",commands[0]);
                 status = lstat(temp, &buffer);
                 if(status==0){
                     is_command = 1;
-                    strcpy(actual_command,temp);
                     strcpy(commands[0], temp);
                 }
                 free(temp);
-            }     
+            }    
+            */
+            int is_command = get_commands(commands,paths,path_free);
             if(is_command){
                  pid_t child_pid, w;
                  int child_status;
@@ -179,7 +196,6 @@ int main()
             }else{
                 fprintf(stderr,"ERROR: '%s' is not a command!\n",commands[0]); 
             }
-            free(actual_command);
             
             
         }
